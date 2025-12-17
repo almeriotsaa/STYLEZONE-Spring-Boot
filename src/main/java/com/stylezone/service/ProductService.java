@@ -6,75 +6,58 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProductService {
 
-    private final ProductRepository productRepo;
+    private final ProductRepository repo;
 
-    public ProductService(ProductRepository productRepo) {
-        this.productRepo = productRepo;
+    public ProductService(ProductRepository repo) {
+        this.repo = repo;
     }
 
-    public List<Product> getAll() {
-        return productRepo.findAll();
+    public Product save(Product product) {
+        return repo.save(product);
     }
 
-    public Optional<Product> getById(Integer id) {
-        return productRepo.findById(id);
+    public List<Product> findAll() {
+        return repo.findAll();
     }
 
-    public Product create(Product product) {
-        return productRepo.save(product);
-    }
-
-    public Product update(Integer id, Product updated) {
-        return productRepo.findById(id)
-                .map(product -> {
-                    product.setCategoryId(updated.getCategoryId());
-                    product.setImage(updated.getImage());
-                    product.setNameProduct(updated.getNameProduct());
-                    product.setDescription(updated.getDescription());
-                    product.setPrice(updated.getPrice());
-                    product.setStock(updated.getStock());
-                    product.setSize(updated.getSize());
-                    return productRepo.save(product);
-                })
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+    public Product findById(Integer id) {
+        return repo.findById(id).orElseThrow();
     }
 
     public void delete(Integer id) {
-        productRepo.deleteById(id);
+        repo.deleteById(id);
     }
 
-    public List<Product> searchProducts(
-            String nameProduct,
+    public List<Product> search(
+            String name,
             Integer categoryId,
             BigDecimal minPrice,
             BigDecimal maxPrice
     ) {
 
-        if (nameProduct != null && categoryId != null) {
-            return productRepo
-                    .findByNameProductContainingIgnoreCaseAndCategoryId(
-                            nameProduct,
-                            categoryId
-                    );
+        if (name != null && categoryId != null) {
+            return repo.findByNameProductContainingIgnoreCaseAndCategoryId(
+                    name,
+                    categoryId
+            );
         }
 
-        if (nameProduct != null) {
-            return productRepo.findByNameProductContainingIgnoreCase(nameProduct);
+        if (name != null) {
+            return repo.findByNameProductContainingIgnoreCase(name);
         }
 
         if (categoryId != null) {
-            return productRepo.findByCategoryId(categoryId);
+            return repo.findByCategoryId(categoryId);
         }
 
         if (minPrice != null && maxPrice != null) {
-            return productRepo.findByPriceBetween(minPrice, maxPrice);
+            return repo.findByPriceBetween(minPrice, maxPrice);
         }
 
-        return productRepo.findAll();
+        return repo.findAll();
     }
 }

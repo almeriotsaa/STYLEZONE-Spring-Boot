@@ -32,7 +32,7 @@ public class AuthController {
     public AuthResponse login(@RequestBody AuthRequest req) { 
  
         UserDetails user = 
-                userDetailsService.loadUserByUsername(req.getUsername()); 
+                userDetailsService.loadUserByUsername(req.getEmail()); 
  
         if (!passwordEncoder.matches(req.getPassword(), 
 user.getPassword())) { 

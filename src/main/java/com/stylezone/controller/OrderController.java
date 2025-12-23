@@ -16,12 +16,23 @@ public class OrderController {
         this.service = service;
     }
 
-    // GET semua order atau filter
+    // EXISTING: GET semua order atau filter
     @GetMapping
     public List<Order> list(
             @RequestParam(required = false) Integer userId,
             @RequestParam(required = false) String status,
-            @RequestParam(required = false) String shipping) {
+            @RequestParam(required = false) String shipping
+    ) {
+        return service.search(userId, status, shipping);
+    }
+
+    // ✅ NEW: search by userId + status + shipping
+    @GetMapping("/search")
+    public List<Order> searchByUserStatusShipping(
+            @RequestParam(required = false) Integer userId,
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String shipping
+    ) {
         return service.search(userId, status, shipping);
     }
 

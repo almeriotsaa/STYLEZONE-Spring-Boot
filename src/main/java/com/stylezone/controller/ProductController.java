@@ -22,6 +22,7 @@ public class ProductController {
         return service.save(product);
     }
 
+    // EXISTING: list + filter
     @GetMapping
     public List<Product> list(
             @RequestParam(required = false) String name,
@@ -30,6 +31,15 @@ public class ProductController {
             @RequestParam(required = false) BigDecimal maxPrice
     ) {
         return service.search(name, categoryId, minPrice, maxPrice);
+    }
+
+    // ✅ NEW: search by name AND categoryId
+    @GetMapping("/search")
+    public List<Product> searchByNameAndCategory(
+            @RequestParam String name,
+            @RequestParam Integer categoryId
+    ) {
+        return service.search(name, categoryId, null, null);
     }
 
     @GetMapping("/{id}")

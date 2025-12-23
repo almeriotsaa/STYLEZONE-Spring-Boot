@@ -38,7 +38,7 @@ Exception {
                 .requestMatchers("/api/auth/login", 
                 "/api/auth/register",
                 "/swagger-ui/**",
-                "swagger-ui.html").permitAll() 
+                "/swagger-ui.html").permitAll() 
                 .anyRequest().authenticated() 
             ) 
             .sessionManagement(session -> session 

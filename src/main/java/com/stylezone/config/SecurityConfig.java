@@ -36,7 +36,9 @@ Exception {
             .csrf(csrf -> csrf.disable()) 
             .authorizeHttpRequests(auth -> auth 
                 .requestMatchers("/api/auth/login", 
-"/api/auth/register").permitAll() 
+                "/api/auth/register",
+                "/swagger-ui/**",
+                "swagger-ui.html").permitAll() 
                 .anyRequest().authenticated() 
             ) 
             .sessionManagement(session -> session 
